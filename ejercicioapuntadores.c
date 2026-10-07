@@ -1,32 +1,52 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-
+#include <sys/wait.h>
+#include <sys/types.h>
 
 int suma(int a, int b);
 int resta(int a, int b);
 int multi(int a, int b);
 int division(int a, int b);
 int modulo(int a, int b);
-int incognita (int a, int z);
 
 int main(){
- int x=8, y=9;
-  int (*ap) (int, int);
- printf("Soy main  y mi direccion es %p  y mi valor es %p\n", &main, main);
-  printf("Soy suma  y mi direccion es %p  y mi valor es %p\n", &suma, suma);
-  ap= suma;
-  printf("El valor de ap es %p y vive en un %p\n", ap, &ap); 
-  printf("invocando a suma de forma normal");
-  int r= suma(x,y);
-  printf("El resultado de la suma:%d\n", r);
-    printf("invocando a suma desde un apuntador a funcion");
-  int z= ap(x,y);
-  printf("El resultado de la suma por el apuntador es :%d\n", z);
-
-}
-
-
+  int i;
+  int regWait=-1;
+   int aux;
+  int numhijos=5;
+   int a=9; 
+   int b=10;
+  int (*pFun[numhijos])(int, int);
+  pFun[0]=suma;
+  pFun[1]=resta;
+  pFun[2]=multi;
+  pFun[3]=division;
+  pFun[4]=modulo;
+  
+  int resultados[numhijos];
+  
+  for (i=0; i<5; i++){
+      if(vfork()==0){   //!fork()
+          printf("Soy el hijo %d y mi i vale %d\n", (int)getpid(), i);
+          int z=pFun[i](a, b);
+          printf("Soy el hijo %d y mi resultado es vale %d\n", (int)getpid(), z);
+          _exit(z);
+      }else{
+        regWait= (int) wait(&aux);
+	printf("Estoy por terminar y me desperto mi hijo con ID %d \n", regWait);
+	if (WIFEXITED(aux)) {
+		printf("El hijo terminó normalmente con el código: %d\n", WEXITSTATUS(aux));
+	}else{
+		printf("No termino por exit");
+	}
+        
+      }
+  
+  }
+ // while(1);
+  }
+  
 int suma(int a, int b){
   return a+b;
 }
