@@ -5,20 +5,27 @@
 #include <stdlib.h>
 
 int numero=30;
+pthread_mutex_t candado;
 
 void* tarea (void * a){
  int id=  *((int*)a);
+ while(1){
+ //cerrar el candado
   printf("Hola desde el hilo %d y veo la variable numero en %d \n", id,numero); 
   numero++;
-  sleep(id*3);
+  sleep((id+2)*10);
   printf("Adios desde el hilo %d y veo la variable numero en %d \n", id,numero); 
-
+  //abrir el candado 
+}
    
   return NULL;
 }
 
 int main(){
+
  pthread_t *hilos;
+ 
+ //inciializacin candado
  int * idHilos;
  int i,numHilos;
  printf("Soy el proceso %d \n", (int)getpid());
