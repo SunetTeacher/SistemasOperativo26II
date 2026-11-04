@@ -11,9 +11,10 @@ void* tarea (void * a){
 }
 
 int main(){
- pthread_t hilo,hilo2;
+ pthread_t hilo,hilo2, hilo3;
  char id1='A';
  char id2='B';
+  char id3='C';
  printf("Soy el proceso %d y mi hilo main es :%d\n", (int)getpid(), (int)syscall(SYS_gettid));
  int valor= pthread_create(&hilo, NULL, tarea, (void*)&id1);
  if(valor!=0){ //Validado si se creo el hilo o no
@@ -27,8 +28,16 @@ int main(){
  }else{
     printf("El hilo fue creado satisfactoriamente\n");
  }
+ 
+ valor= pthread_create(&hilo3, NULL, tarea, (void*)&id3);
+  if(valor!=0){ //Validado si se creo el hilo o no
+    printf("El hilo no fue creado \n");
+ }else{
+    printf("El hilo fue creado satisfactoriamente\n");
+ }
  pthread_join(hilo, NULL);
  pthread_join(hilo2, NULL);
+  pthread_join(hilo3, NULL);
  while(1);
   return 0;
 }
