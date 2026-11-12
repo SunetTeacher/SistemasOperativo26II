@@ -23,8 +23,7 @@ srand(time(NULL));
 int N=2;
   int datosHilo1[4];
   int datosHilo2[4];
-     pthread_t hilos[2];
-  
+  pthread_t hilos[2];
     int totalDatos;
     int elegido=rand()%2;
     printf("De que tamaño quieres tu arreglo: \n");
